@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            color: white;
+        }
+
+        #chatheader {
+            display: flex;
+            padding: 20px;
+            justify-content: space-between;
+            background-color: rgb(96, 93, 134);
+        }
+
+        #base_options {
+            display: flex;
+            background-color: transparent;
+        }
+
+        #base_options button {
+            background-color: rgb(120, 117, 167);
+            padding: 10px 20px 10px 20px;
+            margin: 0px 20px 0px 20px;
+            color: white;
+            border-radius: 10px;
+            border: none;
+        }
+
+        #chatbot {
+            background-color: rgb(22, 22, 31);
+        }
+
+        #chat {
+            min-width: 500px;
+            min-height: 500px;
+            max-height: 500px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        #input {
+            display: flex;
+            padding: 20px;
+            justify-content: space-between;
+            background-color: rgb(22, 22, 31);
+        }
+
+        #input input {
+            width: 93%;
+            background-color: rgb(120, 117, 167);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        #input input::placeholder {
+            color: #e6e6e6;
+            /* Cor do placeholder um branco mais acinzentado */
+        }
+
+        #input button {
+            background-color: rgb(120, 117, 167);
+            color: white;
+            padding: 0px 30px 0px 30px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .mensage {
+            background-color: rgb(67, 65, 94);
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            max-width: 100%;
+            padding: 20px;
+            word-wrap: break-word;
+        }
+
+        .my_mensage {
+            background-color: rgb(62, 60, 92);
+            position: relative;
+            float: right;
+            align-self: flex-end;
+        }
+
+        .bot_mensage {
+            background-color: rgb(48, 47, 68);
+            float: left;
+        }
+
+        .loading-gif {
+            width: 20px;
+            height: 20px;
+        }
+
+        #base_info {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #base_info h1{
+            margin: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="chatheader">
+        <div id="base_info">
+            <img src="public/base_img.png" width="64" height="64">
+            <h1>Auxiliar</h1>
+        </div>
+        <div id="base_options">
+            <h5>
+
+                Gerar
+
+                <select name="gerador" id="url_select">
+                    <option value="txt">texto</option>
+                    <option value="img">imagem</option>
+                </select>
+                <!-- 
+                Selecionar documento relevante para o chat
+
+                <select name="gerador" id="url_select">
+                    <option value="txt">texto</option>
+                    <option value="img">imagem</option>
+                </select> -->
+
+            </h5>
+        </div>
+    </div>
+
+    <div id="chatbot">
+
+        <div id="chat">
+            
+            <!-- <div class="my_mensage mensage">Minha pergunta</div>
+
+            <div class="bot_mensage mensage on_loading"> <img class="loading-gif" src="https://i.gifer.com/YlWC.gif"
+                    alt="Loading..."></div>
+
+            <div class="my_mensage mensage">Minha pergunta 2</div>
+            <div class="bot_mensage mensage">Resposta gerada por IA</div>
+            <div class="my_mensage mensage">Gerar Planos de Ensino</div>
+            <div class="bot_mensage mensage">
+                <span class="author-assistant">AuxProf</span>
+                1. Plano de Ensino de Matemática para quinta série:<br><br>- Público-alvo: Alunos da quinta série do
+                ensino fundamental.<br><br>- Objetivo do curso: Desenvolver nos alunos habilidades de raciocínio lógico,
+                resolução de problemas e compreensão dos fundamentos da disciplina de matemática.<br><br>- Conteúdo
+                programático: Números inteiros, frações, decimais, geometria, medição e estimativas.<br><br>-
+                Metodologia: Aulas expositivas e práticas, exercícios individuais e em grupo, utilização de material
+                manipulável e softwares educativos.<br><br>- Avaliação: Provas escritas, trabalhos de casa, projetos de
+                grupo e participação em sala de aula.<br><br>- Referências bibliográficas: Livro didático adotado pela
+                escola, sites educacionais na internet, outros livros sobre matemática para essa faixa
+                etária.<br><br><br>2. Plano de Ensino para um Curso de Inglês para Adultos:<br><br>- Público-alvo:
+                Adultos interessados em aprender inglos.<br><br>- Objetivo do curso: Oferecer aos participantes
+                conhecimentos básicos da língua inglesa para comunicação em situações cotidianas.<br><br>- Conteúdo
+                programático: Vocabulário, gramática, escuta, fala, leitura e escrita em inglês.<br><br>- Metodologia:
+                Aulas expositivas e interativas, atividades de audição e pronúncia, role-play, uso de aplicativos e
+                websites para aprender inglês.<br><br>- Avaliação: Exercícios em sala de aula, exames escritos,
+                apresentações orais e avaliações das habilidades de escuta.<br><br>- Referências bibliográficas: Livros
+                didáticos de inglês para adultos, materiais on-line gratuitos, podcasts e filmes em
+                inglês.<br><br><br>3. Plano de Ensino de História para o Ensino Médio:<br><br>- Público-alvo: Alunos do
+                ensino médio.<br><br>- Objetivo do curso: Proporcionar aos alunos uma compreensão das principais épocas
+                e eventos da história mundial e brasileira, desenvolver habilidades de análise histórica e pensamento
+                crítico.<br><br>- Conteúdo programático: Pré-história, antiguidade, idade média, renascimento, era
+                moderna, história contemporânea.<br><br>- Metodologia: Uso de documentos históricos, filmes, debates,
+                exercícios de interpretacão historica.<br><br>- Avaliação: Provas escritas, trabalhos em grupo,
+                seminários, resenhas de filmes e livros.<br><br>- Referências bibliográficas: Livros didáticos e de
+                referência sobre história, documentários, sites educativos. <br><br>Lembre-se de que estes são apenas
+                exemplos. Seu plano de ensino deve ser adaptado às necessidades de seus alunos específicos e aos
+                recursos que você tem disponível.
+            </div> -->
+        </div>
+
+
+        <div id="base_options">
+            <button onclick="send_message('Gere um Planos de Aula')">
+                Gerar Planos de Aula
+            </button>
+            <button onclick="send_message('Gere um Planos de Ensino')">
+                Gerar Planos de Ensino
+            </button>
+            <button onclick="send_message('Gere uma Lista de Exercícios')">
+                Gerar Lista de Exercícios
+            </button>
+            <button onclick="send_message('Gere Avaliações')">
+                Gerar Avaliações
+            </button>
+        </div>
+
+
+        <div id="input">
+            <input type="text" id="main_input" placeholder="Escreva uma mensagem">
+            <button onclick="send_message(null)">Enviar</button>
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <script>
+
+        const API_KEY = 'sk-proj-RjIL8KX4sXI70WHja3ETT3BlbkFJlcaxWDiy7TdSfpiBtSJZ';
+        const chat_hist = [
+            {
+                "role": "system",
+                "content": "você é um professor assistente super prestativo que utiliza linguagem clara e objetiva e fornece explicações para os termos tecnicos quando necessita"
+            }
+        ];
+
+
+        function send_message(text) {
+            place_asking(text);
+            var chat = document.getElementById('chat');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function place_asking(input) {
+            if (input == null) {
+                var inputElement = document.getElementById('main_input');
+                var input = inputElement.value;
+                inputElement.value = "";
+            }
+            var chat = document.getElementById('chat');
+            var newMessage = document.createElement('div');
+            newMessage.className = 'my_mensage mensage';
+            newMessage.textContent = input;
+
+            chat.appendChild(newMessage);
+            place_answer(input);
+        }
+
+        async function place_answer(input) {
+
+            var chat = document.getElementById('chat');
+            var newMessage = document.createElement('div');
+            var loadingGif = document.createElement('img');
+
+
+            newMessage.className = 'bot_mensage mensage on_loading';
+
+            loadingGif.className = 'loading-gif';
+            loadingGif.src = 'https://i.gifer.com/YlWC.gif';
+            loadingGif.alt = 'Loading...';
+
+            newMessage.appendChild(loadingGif);
+
+            chat.appendChild(newMessage);
+
+            await select_ia(input, newMessage);
+
+        }
+
+        async function select_ia(prompt, html_item) {
+            var select = document.getElementById('url_select');
+            if (select.value == 'txt') {
+                await chat_gpt(prompt, html_item);
+            } else if (select.value == 'img') {
+                await dall_e(prompt, html_item)
+            }
+        }
+
+        async function chat_gpt(prompt, html_item) {
+
+            if (chat_hist.length == 11) {
+                chat_hist.splice(1, 1);
+                chat_hist.splice(1, 1);
+            }
+
+            chat_hist.push({
+                "role": "user",
+                "content": prompt
+            });
+            const requestBody = {
+                "model": "gpt-4",
+                "messages": chat_hist
+            };
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices[0].message.content;
+
+                // Escapando o conteúdo e formatando-o
+                // const formattedContent = content.split('\n').map(escapeHtml).join('<br>');
+                const formattedContent = formatContent(content);
+
+                // Inserir o conteúdo formatado no HTML
+                html_item.innerHTML = `${formattedContent}`;
+                html_item.classList.remove('on_loading');
+
+                chat_hist.push({
+                    "role": "system",
+                    "content": content
+                });
+            } catch (error) {
+                console.error('Erro ao buscar a conclusão:', error);
+            }
+        }
+
+        async function dall_e(prompt, html_item) {
+            fetch('https://api.openai.com/v1/images/generations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify({
+                    "model": "dall-e-3",
+                    "prompt": prompt,
+                    "n": 1,
+                    "size": "1024x1024"
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    data.data.forEach(element => {
+                        html_item.innerHTML = `<a href="${element.url}" target="_blank"><img src="${element.url}" width="512" height="512"></a>`;
+                        // html_item.innerHTML = `<a href="${element.url}">Acesse a imagem gerada por esse link</a>`;
+                    });
+                    html_item.classList.remove('on_loading');
+                })
+                .catch(error => console.error('Erro:', error));
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;").replace(/###\s+(.+)/g, (match, p1) => {
+                    return `<strong><h4>${escapeHtml(p1)}</h4></strong>`;
+                })
+                .replace(/'/g, "&#039;").replace(/\^(\d+)/g, (match, p1) => {
+                    return `<sup>${p1}</sup>`;
+                });
+        }
+
+        function formatContent(content) {
+            let formattedContent = escapeHtml(content);
+            formattedContent = formattedContent.replace(/\n/g, "<br>");
+            return formattedContent;
+        }
+    </script>
+</body>
+
+</html>
