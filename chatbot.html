@@ -16,12 +16,14 @@
             display: flex;
             padding: 20px;
             justify-content: space-between;
+            align-items: center;
             background-color: rgb(96, 93, 134);
         }
 
         #base_options {
             display: flex;
             background-color: transparent;
+            padding: 20px 0px 0px 0px;
         }
 
         #base_options button {
@@ -46,6 +48,7 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 20px;
+            border-bottom: solid 1px rgb(120, 117, 167);
         }
 
         #input {
@@ -70,7 +73,7 @@
         }
 
         #input button {
-            background-color: rgb(120, 117, 167);
+            background-color: transparent;
             color: white;
             padding: 0px 30px 0px 30px;
             border-radius: 10px;
@@ -131,13 +134,6 @@
                     <option value="txt">texto</option>
                     <option value="img">imagem</option>
                 </select>
-                <!-- 
-                Selecionar documento relevante para o chat
-
-                <select name="gerador" id="url_select">
-                    <option value="txt">texto</option>
-                    <option value="img">imagem</option>
-                </select> -->
 
             </h5>
         </div>
@@ -146,44 +142,6 @@
     <div id="chatbot">
 
         <div id="chat">
-            
-            <!-- <div class="my_mensage mensage">Minha pergunta</div>
-
-            <div class="bot_mensage mensage on_loading"> <img class="loading-gif" src="https://i.gifer.com/YlWC.gif"
-                    alt="Loading..."></div>
-
-            <div class="my_mensage mensage">Minha pergunta 2</div>
-            <div class="bot_mensage mensage">Resposta gerada por IA</div>
-            <div class="my_mensage mensage">Gerar Planos de Ensino</div>
-            <div class="bot_mensage mensage">
-                <span class="author-assistant">AuxProf</span>
-                1. Plano de Ensino de Matemática para quinta série:<br><br>- Público-alvo: Alunos da quinta série do
-                ensino fundamental.<br><br>- Objetivo do curso: Desenvolver nos alunos habilidades de raciocínio lógico,
-                resolução de problemas e compreensão dos fundamentos da disciplina de matemática.<br><br>- Conteúdo
-                programático: Números inteiros, frações, decimais, geometria, medição e estimativas.<br><br>-
-                Metodologia: Aulas expositivas e práticas, exercícios individuais e em grupo, utilização de material
-                manipulável e softwares educativos.<br><br>- Avaliação: Provas escritas, trabalhos de casa, projetos de
-                grupo e participação em sala de aula.<br><br>- Referências bibliográficas: Livro didático adotado pela
-                escola, sites educacionais na internet, outros livros sobre matemática para essa faixa
-                etária.<br><br><br>2. Plano de Ensino para um Curso de Inglês para Adultos:<br><br>- Público-alvo:
-                Adultos interessados em aprender inglos.<br><br>- Objetivo do curso: Oferecer aos participantes
-                conhecimentos básicos da língua inglesa para comunicação em situações cotidianas.<br><br>- Conteúdo
-                programático: Vocabulário, gramática, escuta, fala, leitura e escrita em inglês.<br><br>- Metodologia:
-                Aulas expositivas e interativas, atividades de audição e pronúncia, role-play, uso de aplicativos e
-                websites para aprender inglês.<br><br>- Avaliação: Exercícios em sala de aula, exames escritos,
-                apresentações orais e avaliações das habilidades de escuta.<br><br>- Referências bibliográficas: Livros
-                didáticos de inglês para adultos, materiais on-line gratuitos, podcasts e filmes em
-                inglês.<br><br><br>3. Plano de Ensino de História para o Ensino Médio:<br><br>- Público-alvo: Alunos do
-                ensino médio.<br><br>- Objetivo do curso: Proporcionar aos alunos uma compreensão das principais épocas
-                e eventos da história mundial e brasileira, desenvolver habilidades de análise histórica e pensamento
-                crítico.<br><br>- Conteúdo programático: Pré-história, antiguidade, idade média, renascimento, era
-                moderna, história contemporânea.<br><br>- Metodologia: Uso de documentos históricos, filmes, debates,
-                exercícios de interpretacão historica.<br><br>- Avaliação: Provas escritas, trabalhos em grupo,
-                seminários, resenhas de filmes e livros.<br><br>- Referências bibliográficas: Livros didáticos e de
-                referência sobre história, documentários, sites educativos. <br><br>Lembre-se de que estes são apenas
-                exemplos. Seu plano de ensino deve ser adaptado às necessidades de seus alunos específicos e aos
-                recursos que você tem disponível.
-            </div> -->
         </div>
 
 
@@ -205,11 +163,12 @@
 
         <div id="input">
             <input type="text" id="main_input" placeholder="Escreva uma mensagem">
-            <button onclick="send_message(null)">Enviar</button>
+            <button onclick="send_message(null)"><img src="public/send.svg" alt=""></button>
         </div>
 
     </div>
 
+    
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -223,7 +182,7 @@
         const chat_hist = [
             {
                 "role": "system",
-                "content": "você é um professor assistente super prestativo que utiliza linguagem clara e objetiva e fornece explicações para os termos tecnicos quando necessita"
+                "content": "Você é um EduBot chamado Aux Prof que tem como objetivo assistir educadores nas suas principais funções, como por exemplo criação de planos de aula, listas de exercícios personalizados, etc. você deve ter a capacidade de coleta de informações, geração de conteúdo educativo, personalização de respostas, e conhecimento multi-disciplinar. e sua interação deve ser dialogal e personalizada, com foco em clareza e eficiência na coleta de informações e entrega de resultados."
             }
         ];
 
@@ -282,34 +241,29 @@
         async function chat_gpt(prompt, html_item) {
 
             if (chat_hist.length == 11) {
-                chat_hist.splice(1, 1);
-                chat_hist.splice(1, 1);
-            }
+    chat_hist.splice(1, 1);
+    chat_hist.splice(1, 1);
+}
 
-            chat_hist.push({
-                "role": "user",
-                "content": prompt
-            });
-            const requestBody = {
-                "model": "gpt-4",
-                "messages": chat_hist
-            };
+chat_hist.push({
+    "role": "user",
+    "content": prompt
+});
+const requestBody = {
+    "model": "gpt-3.5-turbo",
+    "messages": chat_hist
+};
 
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
-                    },
-                    body: JSON.stringify(requestBody)
-                });
+try {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://api.openai.com/v1/chat/completions', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', `Bearer ${API_KEY}`);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
                 const content = data.choices[0].message.content;
 
                 // Escapando o conteúdo e formatando-o
@@ -324,9 +278,17 @@
                     "role": "system",
                     "content": content
                 });
-            } catch (error) {
-                console.error('Erro ao buscar a conclusão:', error);
+            } else {
+                console.error(`HTTP error! status: ${xhr.status}`);
             }
+        }
+    };
+
+    xhr.send(JSON.stringify(requestBody));
+} catch (error) {
+    console.error('Erro ao buscar a conclusão:', error);
+}
+
         }
 
         async function dall_e(prompt, html_item) {
