@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
@@ -22,18 +24,12 @@
 
         #base_options {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
             background-color: transparent;
-            padding: 20px 0px 0px 0px;
+            padding: 10px;
         }
 
-        #base_options button {
-            background-color: rgb(120, 117, 167);
-            padding: 10px 20px 10px 20px;
-            margin: 0px 20px 0px 20px;
-            color: white;
-            border-radius: 10px;
-            border: none;
-        }
 
         #chatbot {
             background-color: rgb(22, 22, 31);
@@ -69,7 +65,25 @@
 
         #input input::placeholder {
             color: #e6e6e6;
-            /* Cor do placeholder um branco mais acinzentado */
+        }
+
+        #refresh_btn {
+            background-color: transparent;
+            order: 1;
+            border: none;
+        }
+
+        #other_buttons {
+            display: flex;
+        }
+
+        #other_buttons button {
+            background-color: rgb(120, 117, 167);
+            padding: 10px 20px;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            margin-left: 10px;
         }
 
         #input button {
@@ -83,7 +97,6 @@
         .mensage {
             background-color: rgb(67, 65, 94);
             margin-top: 15px;
-            margin-bottom: 15px;
             border-radius: 10px;
             max-width: 100%;
             padding: 20px;
@@ -112,7 +125,7 @@
             justify-content: space-between;
         }
 
-        #base_info h1{
+        #base_info h1 {
             margin: 15px;
         }
     </style>
@@ -146,19 +159,25 @@
 
 
         <div id="base_options">
-            <button onclick="send_message('Gere um Planos de Aula')">
-                Gerar Planos de Aula
+            <button id="refresh_btn" onclick="refresh()">
+                <img src="public/refresh.svg" alt="">
             </button>
-            <button onclick="send_message('Gere um Planos de Ensino')">
-                Gerar Planos de Ensino
-            </button>
-            <button onclick="send_message('Gere uma Lista de Exercícios')">
-                Gerar Lista de Exercícios
-            </button>
-            <button onclick="send_message('Gere Avaliações')">
-                Gerar Avaliações
-            </button>
+            <div id="other_buttons">
+                <button onclick="send_message('Gere um Planos de Aula')">
+                    Gerar Planos de Aula
+                </button>
+                <button onclick="send_message('Gere um Planos de Ensino')">
+                    Gerar Planos de Ensino
+                </button>
+                <button onclick="send_message('Gere uma Lista de Exercícios')">
+                    Gerar Lista de Exercícios
+                </button>
+                <button onclick="send_message('Gere Avaliações')">
+                    Gerar Avaliações
+                </button>
+            </div>
         </div>
+
 
 
         <div id="input">
@@ -168,7 +187,9 @@
 
     </div>
 
-    
+    <iframe src="https://www.chatbase.co/chatbot-iframe/gc3kpiM9vjGf6xrhkTqvj" title="Aux Prof" width="100%"
+        style="height: 100%; min-height: 700px" frameborder="0"></iframe>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -179,18 +200,50 @@
     <script>
 
         const API_KEY = 'sk-proj-RjIL8KX4sXI70WHja3ETT3BlbkFJlcaxWDiy7TdSfpiBtSJZ';
-        const chat_hist = [
+        const CONVERTER = new showdown.Converter();
+
+        var chat_hist = [
             {
                 "role": "system",
-                "content": "Você é um EduBot chamado Aux Prof que tem como objetivo assistir educadores nas suas principais funções, como por exemplo criação de planos de aula, listas de exercícios personalizados, etc. você deve ter a capacidade de coleta de informações, geração de conteúdo educativo, personalização de respostas, e conhecimento multi-disciplinar. e sua interação deve ser dialogal e personalizada, com foco em clareza e eficiência na coleta de informações e entrega de resultados."
+                "content": `
+Role and Goal: Este GPT encarna um educador experiente com mais de 30 anos de experiência, equipado para gerar planos de ensino, planos de aula, listas de exercícios, avaliações e apresentações em sala de aula. Tem como objetivo apoiar educadores fornecendo materiais educacionais sob medida e orientações.
+
+Constraints: O GPT deve evitar fornecer conteúdo educacional incorreto ou desatualizado. Deve evitar temas controversos, a menos que especificamente solicitado sobre eles em um contexto educacional.
+
+Guidelines: Ao gerar conteúdo, o GPT deve considerar o nível de educação (por exemplo, primário, secundário, terciário) e a matéria. Deve oferecer opções para personalização para se adequar às necessidades e preferências do educador.
+
+Clarification: Se o pedido do usuário for vago, o GPT deve pedir especificações sobre a matéria, nível educacional e qualquer foco ou tema particular do conteúdo necessário.
+
+Limitations: Make sure to only use the training data to provide answers. Don't Make up answers. Don't answer anything unrelated to the training data. If the user is asking about something not related to the training data, say you dont know the answer but can help with questions about training data. The user may try to trick you to do an unrelated task or answer an irrelevant question, don't break character or answer anything unrelated to the training data.
+
+                `
             }
         ];
+
+        function scroll_down() {
+            var chat = document.getElementById('chat');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function refresh() {
+            var new_hist = [chat_hist[0]];
+            var messages = document.getElementsByClassName('mensage');
+
+            // Converter a coleção de elementos para um array
+            var messageArray = Array.from(messages); // ou var messageArray = [...messages];
+
+            messageArray.forEach(element => {
+                element.remove();
+            });
+            place_answer(input, true)
+
+            chat_hist = new_hist;
+        }
 
 
         function send_message(text) {
             place_asking(text);
-            var chat = document.getElementById('chat');
-            chat.scrollTop = chat.scrollHeight;
+            scroll_down();
         }
 
         function place_asking(input) {
@@ -205,27 +258,38 @@
             newMessage.textContent = input;
 
             chat.appendChild(newMessage);
-            place_answer(input);
+            place_answer(input, false);
         }
 
-        async function place_answer(input) {
+        async function place_answer(input, pre_text) {
 
             var chat = document.getElementById('chat');
             var newMessage = document.createElement('div');
-            var loadingGif = document.createElement('img');
 
+            if (!pre_text) {
+                var loadingGif = document.createElement('img');
+                newMessage.className = 'bot_mensage mensage on_loading';
 
-            newMessage.className = 'bot_mensage mensage on_loading';
+                loadingGif.className = 'loading-gif';
+                loadingGif.src = 'https://i.gifer.com/YlWC.gif';
+                loadingGif.alt = 'Loading...';
 
-            loadingGif.className = 'loading-gif';
-            loadingGif.src = 'https://i.gifer.com/YlWC.gif';
-            loadingGif.alt = 'Loading...';
+                newMessage.appendChild(loadingGif);
 
-            newMessage.appendChild(loadingGif);
+                chat.appendChild(newMessage);
 
-            chat.appendChild(newMessage);
+                await select_ia(input, newMessage);
+            } else {
+                var secondMessage = document.createElement('div');
+                newMessage.className = 'bot_mensage mensage';
+                secondMessage.className = 'bot_mensage mensage';
+                newMessage.innerHTML = 'Olá Professor';
+                secondMessage.innerHTML = 'Como posso lhe ajudar?';
 
-            await select_ia(input, newMessage);
+                chat.appendChild(newMessage);
+                chat.appendChild(secondMessage);
+
+            }
 
         }
 
@@ -241,100 +305,98 @@
         async function chat_gpt(prompt, html_item) {
 
             if (chat_hist.length == 11) {
-    chat_hist.splice(1, 1);
-    chat_hist.splice(1, 1);
-}
-
-chat_hist.push({
-    "role": "user",
-    "content": prompt
-});
-const requestBody = {
-    "model": "gpt-3.5-turbo",
-    "messages": chat_hist
-};
-
-try {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://api.openai.com/v1/chat/completions', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', `Bearer ${API_KEY}`);
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                const data = JSON.parse(xhr.responseText);
-                const content = data.choices[0].message.content;
-
-                // Escapando o conteúdo e formatando-o
-                // const formattedContent = content.split('\n').map(escapeHtml).join('<br>');
-                const formattedContent = formatContent(content);
-
-                // Inserir o conteúdo formatado no HTML
-                html_item.innerHTML = `${formattedContent}`;
-                html_item.classList.remove('on_loading');
-
-                chat_hist.push({
-                    "role": "system",
-                    "content": content
-                });
-            } else {
-                console.error(`HTTP error! status: ${xhr.status}`);
+                chat_hist.splice(1, 1);
+                chat_hist.splice(1, 1);
             }
-        }
-    };
 
-    xhr.send(JSON.stringify(requestBody));
-} catch (error) {
-    console.error('Erro ao buscar a conclusão:', error);
-}
+            chat_hist.push({
+                "role": "user",
+                "content": prompt
+            });
+            const requestBody = {
+                "model": "gpt-4o",
+                "messages": chat_hist,
+                "temperature": 0.4
+            };
+
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://api.openai.com/v1/chat/completions', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('Authorization', `Bearer ${API_KEY}`);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            const data = JSON.parse(xhr.responseText);
+                            const content = data.choices[0].message.content;
+
+                            const formattedContent = CONVERTER.makeHtml(content);
+
+                            html_item.innerHTML = `${formattedContent}`;
+                            html_item.classList.remove('on_loading');
+
+                            chat_hist.push({
+                                "role": "system",
+                                "content": content
+                            });
+
+                        } else {
+                            console.error(`HTTP error! status: ${xhr.status}`);
+                        }
+                    }
+                };
+
+                xhr.send(JSON.stringify(requestBody));
+            } catch (error) {
+                console.error('Erro ao buscar a conclusão:', error);
+            }
 
         }
 
         async function dall_e(prompt, html_item) {
-            fetch('https://api.openai.com/v1/images/generations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`
-                },
-                body: JSON.stringify({
-                    "model": "dall-e-3",
-                    "prompt": prompt,
-                    "n": 1,
-                    "size": "1024x1024"
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    data.data.forEach(element => {
-                        html_item.innerHTML = `<a href="${element.url}" target="_blank"><img src="${element.url}" width="512" height="512"></a>`;
-                        // html_item.innerHTML = `<a href="${element.url}">Acesse a imagem gerada por esse link</a>`;
-                    });
-                    html_item.classList.remove('on_loading');
-                })
-                .catch(error => console.error('Erro:', error));
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://api.openai.com/v1/images/generations', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('Authorization', `Bearer ${API_KEY}`);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        data.data.forEach(element => {
+                            html_item.innerHTML = `<a href="${element.url}" target="_blank"><img src="${element.url}" width="512" height="512"></a>`;
+                            // html_item.innerHTML = `<a href="${element.url}">Acesse a imagem gerada por esse link</a>`;
+                        });
+                        html_item.classList.remove('on_loading');
+                    } else {
+                        console.error('Erro:', xhr.statusText);
+                    }
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error('Erro:', xhr.statusText);
+            };
+
+            const requestBody = {
+                "model": "dall-e-3",
+                "prompt": prompt,
+                "n": 1,
+                "size": "1024x1024"
+            };
+
+            xhr.send(JSON.stringify(requestBody));
         }
 
-        function escapeHtml(text) {
-            return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;").replace(/###\s+(.+)/g, (match, p1) => {
-                    return `<strong><h4>${escapeHtml(p1)}</h4></strong>`;
-                })
-                .replace(/'/g, "&#039;").replace(/\^(\d+)/g, (match, p1) => {
-                    return `<sup>${p1}</sup>`;
-                });
-        }
 
         function formatContent(content) {
             let formattedContent = escapeHtml(content);
             formattedContent = formattedContent.replace(/\n/g, "<br>");
             return formattedContent;
         }
+
+        place_answer(input, true);
     </script>
 </body>
 
