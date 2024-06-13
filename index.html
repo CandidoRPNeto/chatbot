@@ -19,7 +19,7 @@
             padding: 20px;
             justify-content: space-between;
             align-items: center;
-            background-color: rgb(96, 93, 134);
+            background-color: black;
         }
 
         #base_options {
@@ -32,7 +32,7 @@
 
 
         #chatbot {
-            background-color: rgb(22, 22, 31);
+            background-color: black;
         }
 
         #chat {
@@ -44,27 +44,51 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 20px;
-            border-bottom: solid 1px rgb(120, 117, 167);
+            border-top: solid 1px rgb(31, 31, 35);
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
         }
+
+        #chat::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        #chat::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            border: 2px solid transparent;
+        }
+
+
+
+
 
         #input {
             display: flex;
             padding: 20px;
             justify-content: space-between;
-            background-color: rgb(22, 22, 31);
+            background-color: black;
         }
 
         #input input {
             width: 93%;
-            background-color: rgb(120, 117, 167);
+            background-color: transparent;
+            outline: none;
             color: white;
             padding: 10px;
             border-radius: 10px;
             border: none;
+            border-bottom: 2px solid rgb(31, 31, 35);
+            border-radius: 0;
+            transition: border-bottom 0.3s ease;
         }
 
         #input input::placeholder {
-            color: #e6e6e6;
+            color: rgb(184, 184, 211);
         }
 
         #refresh_btn {
@@ -73,18 +97,60 @@
             border: none;
         }
 
+        #other_select {
+            display: flex;
+        }
+
+        .btt_select_l {
+            background-color: rgb(31, 31, 35);
+            border-radius: 10px 0px 0px 10px;
+            padding: 7px;
+            cursor: pointer;
+        }
+
+        .btt_select_r {
+            background-color: rgb(31, 31, 35);
+            border-radius: 0px 10px 10px 0px;
+            padding: 7px;
+            cursor: pointer;
+        }
+
+        .btt_select_s {
+            background-color: rgb(63, 63, 70);
+        }
+
         #other_buttons {
             display: flex;
         }
 
         #other_buttons button {
-            background-color: rgb(120, 117, 167);
-            padding: 10px 20px;
+            background-color: rgb(39, 39, 42);
+            padding: 5px 10px;
             color: white;
             border-radius: 10px;
             border: none;
             margin-left: 10px;
+            font-size: 16px;
         }
+
+        #scroll_down {
+            background-color: transparent;
+            border-top: solid 1px rgb(31, 31, 35);
+            padding: 10px;
+            height: 0;
+            position: relative;
+        }
+
+        #scroll_down button {
+            background-color: transparent;
+            border: none;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin: 0px 7px 15px 0px;
+            display: none;
+        }
+
 
         #input button {
             background-color: transparent;
@@ -95,23 +161,22 @@
         }
 
         .mensage {
-            background-color: rgb(67, 65, 94);
             margin-top: 15px;
             border-radius: 10px;
-            max-width: 100%;
+            max-width: 95%;
             padding: 20px;
             word-wrap: break-word;
         }
 
         .my_mensage {
-            background-color: rgb(62, 60, 92);
+            background-color: rgb(59, 129, 246);
             position: relative;
             float: right;
             align-self: flex-end;
         }
 
         .bot_mensage {
-            background-color: rgb(48, 47, 68);
+            background-color: rgb(63, 63, 70);
             float: left;
         }
 
@@ -125,7 +190,7 @@
             justify-content: space-between;
         }
 
-        #base_info h1 {
+        #base_info h3 {
             margin: 15px;
         }
     </style>
@@ -135,20 +200,13 @@
 
     <div id="chatheader">
         <div id="base_info">
-            <img src="public/base_img.png" width="64" height="64">
-            <h1>Auxiliar</h1>
+            <img src="public/base_img.png" width="48" height="48">
+            <h3>Aux prof</h3>
         </div>
         <div id="base_options">
-            <h5>
-
-                Gerar
-
-                <select name="gerador" id="url_select">
-                    <option value="txt">texto</option>
-                    <option value="img">imagem</option>
-                </select>
-
-            </h5>
+            <button id="refresh_btn" onclick="refresh()">
+                <img src="public/refresh.svg" alt="">
+            </button>
         </div>
     </div>
 
@@ -157,11 +215,15 @@
         <div id="chat">
         </div>
 
+        <div id="scroll_down">
+
+            <button onclick="scroll_down()">
+                <img src="public/arrow.svg" alt="">
+            </button>
+        </div>
+
 
         <div id="base_options">
-            <button id="refresh_btn" onclick="refresh()">
-                <img src="public/refresh.svg" alt="">
-            </button>
             <div id="other_buttons">
                 <button onclick="send_message('Gere um Planos de Aula')">
                     Gerar Planos de Aula
@@ -176,19 +238,28 @@
                     Gerar Avaliações
                 </button>
             </div>
+
+            <div id="other_select">
+                <div id="btt_select_l" class="btt_select_l btt_select_s" onclick="changeType('l')">
+                    <img src="public/txt.svg" alt="">
+                </div>
+
+                <div id="btt_select_r" class="btt_select_r" onclick="changeType('r')">
+                    <img src="public/img.svg" alt="">
+                </div>
+
+            </div>
         </div>
 
 
 
         <div id="input">
-            <input type="text" id="main_input" placeholder="Escreva uma mensagem">
+            <input type="text" id="main_input" placeholder="Digite aqui sua instrução">
             <button onclick="send_message(null)"><img src="public/send.svg" alt=""></button>
         </div>
 
     </div>
 
-    <!-- <iframe src="https://www.chatbase.co/chatbot-iframe/gc3kpiM9vjGf6xrhkTqvj" title="Aux Prof" width="100%"
-        style="height: 100%; min-height: 700px" frameborder="0"></iframe> -->
 
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -201,6 +272,7 @@
 
         const API_KEY = 'sk-proj-RjIL8KX4sXI70WHja3ETT3BlbkFJlcaxWDiy7TdSfpiBtSJZ';
         const CONVERTER = new showdown.Converter();
+        var generate_op = 'txt';
 
         var chat_hist = [
             {
@@ -220,10 +292,45 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
             }
         ];
 
+
+        function changeType(dir) {
+            var right = document.getElementById('btt_select_r');
+            var left = document.getElementById('btt_select_l');
+
+            if (dir == 'r') {
+                right.classList.add('btt_select_s');
+                left.classList.remove('btt_select_s');
+                generate_op = 'img';
+
+            } else if (dir == 'l') {
+                left.classList.add('btt_select_s');
+                right.classList.remove('btt_select_s');
+                generate_op = 'txt';
+
+            }
+        }
+
+
+        function checkScroll() {
+            var chat = document.getElementById('chat');
+            var button = document.querySelector('#scroll_down button');
+            var posi = chat.scrollTop + chat.clientHeight;
+            if (
+                posi >= chat.scrollHeight - 150 &&
+                posi <= chat.scrollHeight + 150
+            ) {
+                button.style.display = 'none';
+            } else {
+                button.style.display = 'block';
+            }
+        }
+
         function scroll_down() {
             var chat = document.getElementById('chat');
             chat.scrollTop = chat.scrollHeight;
         }
+
+        document.getElementById('chat').addEventListener('scroll', checkScroll);
 
         function refresh() {
             var new_hist = [chat_hist[0]];
@@ -294,10 +401,9 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
         }
 
         async function select_ia(prompt, html_item) {
-            var select = document.getElementById('url_select');
-            if (select.value == 'txt') {
+            if (generate_op == 'txt') {
                 await chat_gpt(prompt, html_item);
-            } else if (select.value == 'img') {
+            } else if (generate_op == 'img') {
                 await dall_e(prompt, html_item)
             }
         }
