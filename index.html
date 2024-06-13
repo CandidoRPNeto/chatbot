@@ -260,8 +260,6 @@
 
     </div>
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>
@@ -272,6 +270,7 @@
         const API_KEY = 'sk-proj-RjIL8KX4sXI70WHja3ETT3BlbkFJlcaxWDiy7TdSfpiBtSJZ';
         const CONVERTER = new showdown.Converter();
         var generate_op = 'txt';
+        var disable_input = false;
 
         var chat_hist = [
             {
@@ -348,8 +347,11 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
 
 
         function send_message(text) {
-            place_asking(text);
-            scroll_down();
+            if (!disable_input) {
+                disable_input = true;
+                place_asking(text);
+                scroll_down();
+            }
         }
 
         function place_asking(input) {
@@ -400,6 +402,7 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
         }
 
         async function select_ia(prompt, html_item) {
+            console.log(disable_input);
             if (generate_op == 'txt') {
                 await chat_gpt(prompt, html_item);
             } else if (generate_op == 'img') {
@@ -445,9 +448,13 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
                                 "role": "system",
                                 "content": content
                             });
+                            disable_input = false;
+                            console.log(disable_input);
 
                         } else {
                             console.error(`HTTP error! status: ${xhr.status}`);
+                            html_item.innerHTML = `ocorreu um erro com o chat`;
+                            disable_input = false;
                         }
                     }
                 };
@@ -455,6 +462,8 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
                 xhr.send(JSON.stringify(requestBody));
             } catch (error) {
                 console.error('Erro ao buscar a conclusão:', error);
+                html_item.innerHTML = `ocorreu um problema com a resposta do chat`;
+                disable_input = false;
             }
 
         }
@@ -471,17 +480,21 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
                         const data = JSON.parse(xhr.responseText);
                         data.data.forEach(element => {
                             html_item.innerHTML = `<a href="${element.url}" target="_blank"><img src="${element.url}" width="512" height="512"></a>`;
-                            // html_item.innerHTML = `<a href="${element.url}">Acesse a imagem gerada por esse link</a>`;
                         });
                         html_item.classList.remove('on_loading');
+                        disable_input = false;
                     } else {
                         console.error('Erro:', xhr.statusText);
+                        html_item.innerHTML = `ocorreu um erro com o chat`;
+                        disable_input = false;
                     }
                 }
             };
 
             xhr.onerror = function () {
                 console.error('Erro:', xhr.statusText);
+                html_item.innerHTML = `ocorreu um problema com a resposta do chat`;
+                disable_input = false;
             };
 
             const requestBody = {
@@ -492,13 +505,6 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
             };
 
             xhr.send(JSON.stringify(requestBody));
-        }
-
-
-        function formatContent(content) {
-            let formattedContent = escapeHtml(content);
-            formattedContent = formattedContent.replace(/\n/g, "<br>");
-            return formattedContent;
         }
 
         place_answer(input, true);
