@@ -406,7 +406,6 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
         }
 
         async function select_ia(prompt, html_item) {
-            console.log(disable_input);
             if (generate_op == 'txt') {
                 await chat_gpt(prompt, html_item);
             } else if (generate_op == 'img') {
@@ -453,8 +452,6 @@ Limitations: Make sure to only use the training data to provide answers. Don't M
                                 "content": content
                             });
                             disable_input = false;
-                            console.log(disable_input);
-
                         } else {
                             console.error(`HTTP error! status: ${xhr.status}`);
                             html_item.innerHTML = `ocorreu um erro com o chat`;
